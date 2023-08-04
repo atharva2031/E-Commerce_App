@@ -98,6 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
           'Awesome Store',
           style: AppTheme.of(context).title1,
         ),
+        centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
         actions: <Widget>[
@@ -106,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Padding(
                 padding: const EdgeInsets.only(right: 16),
                 child: TextButton.icon(
-                  style: TextButton.styleFrom(foregroundColor: Colors.white),
+                  style: TextButton.styleFrom(foregroundColor: Colors.black),
                   onPressed: () {
                     //Navigator.pushNamed(context, CartPage.routeName);
                   },
@@ -210,32 +211,55 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.list),
+                ),
+              ],
+            ),
+          ),
           Expanded(child: LayoutBuilder(builder: (context, constraints) {
             return GridView.builder(
               itemCount: products.length,
               itemBuilder: (context, index) => InkWell(
-                  onTap: () {
-                    context;
-                    ;
+                onTap: () {
+                  Navigator.push(
+                    context,
                     MaterialPageRoute(
                       builder: (context) => ProductDetailWidget(
                         product: products[index],
                       ),
-                    );
-                  },
-                  child: Container(
-                    //width: MediaQuery.of(context).size.width * 0.45,
-                    decoration: BoxDecoration(
-                      color: AppTheme.of(context).secondaryBackground,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 4,
-                          color: Color(0x3600000F),
-                          offset: Offset(0, 2),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(8),
                     ),
+                  );
+                },
+                child: Container(
+                  //width: MediaQuery.of(context).size.width * 0.45,
+                  decoration: BoxDecoration(
+                    color: AppTheme.of(context).secondaryBackground,
+                    boxShadow: const [
+                      BoxShadow(
+                        blurRadius: 4,
+                        color: Color(0x3600000F),
+                        offset: Offset(0, 2),
+                      )
+                    ],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProductDetailWidget(product: products[index]),
+                        ),
+                      );
+                    },
                     child: Padding(
                       padding: EdgeInsets.all(20),
                       child: Column(
@@ -297,7 +321,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                     ),
-                  )),
+                  ),
+                ),
+              ),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 1,
