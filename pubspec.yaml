@@ -38,6 +38,7 @@ dependencies:
   easy_debounce: ^2.0.3
   animations: ^2.0.3
   google_fonts: ^5.1.0
+  get:
 
 
   # The following adds the Cupertino Icons font to your application.
