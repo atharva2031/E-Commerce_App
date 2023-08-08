@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'product_tile_animation.dart';
 import 'products.dart';
 import 'app_theme.dart';
 import 'package:easy_debounce/easy_debounce.dart';
@@ -16,6 +17,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool isGridView = true;
   TextEditingController? textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool isSearchStarted = false;
@@ -217,119 +219,140 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.list),
+                  onPressed: () {
+                    setState(() {
+                      isGridView = !isGridView;
+                    });
+                  },
+                  icon: isGridView ? Icon(Icons.list) : Icon(Icons.grid_on),
                 ),
               ],
             ),
           ),
-          Expanded(child: LayoutBuilder(builder: (context, constraints) {
-            return GridView.builder(
-              itemCount: products.length,
-              itemBuilder: (context, index) => InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProductDetailWidget(
-                        product: products[index],
-                      ),
-                    ),
-                  );
-                },
-                child: Container(
-                  //width: MediaQuery.of(context).size.width * 0.45,
-                  decoration: BoxDecoration(
-                    color: AppTheme.of(context).secondaryBackground,
-                    boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 4,
-                        color: Color(0x3600000F),
-                        offset: Offset(0, 2),
-                      )
-                    ],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ProductDetailWidget(product: products[index]),
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(0),
-                                    bottomRight: Radius.circular(0),
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(8),
-                                  ),
-                                  child: Image.network(
-                                    products[index].image,
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+          Expanded(
+            child: isGridView
+                ? LayoutBuilder(builder: (context, constraints) {
+                    return GridView.builder(
+                      itemCount: products.length,
+                      itemBuilder: (context, index) => InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetailWidget(
+                                product: products[index],
                               ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          //width: MediaQuery.of(context).size.width * 0.45,
+                          decoration: BoxDecoration(
+                            color: AppTheme.of(context).secondaryBackground,
+                            boxShadow: const [
+                              BoxShadow(
+                                blurRadius: 4,
+                                color: Color(0x3600000F),
+                                offset: Offset(0, 2),
+                              )
                             ],
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      8, 4, 0, 0),
-                                  child: Text(
-                                    products[index].name,
-                                    style: AppTheme.of(context).bodyText1,
-                                  ),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductDetailWidget(
+                                      product: products[index]),
                                 ),
-                              ],
+                              );
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Expanded(
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(0),
+                                            bottomRight: Radius.circular(0),
+                                            topLeft: Radius.circular(8),
+                                            topRight: Radius.circular(8),
+                                          ),
+                                          child: Image.network(
+                                            products[index].image,
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 4, 0, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  8, 4, 0, 0),
+                                          child: Text(
+                                            products[index].name,
+                                            style:
+                                                AppTheme.of(context).bodyText1,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 2, 0, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  8, 4, 0, 0),
+                                          child: Text(
+                                            '\$${products[index].price}',
+                                            style:
+                                                AppTheme.of(context).bodyText2,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 2, 0, 0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      8, 4, 0, 0),
-                                  child: Text(
-                                    '\$${products[index].price}',
-                                    style: AppTheme.of(context).bodyText2,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              ),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 1,
-              ),
-            );
-          })),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1,
+                      ),
+                    );
+                  })
+                : ListView.builder(
+                    itemCount: products.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ProductTileAnimation(
+                        itemNo: index,
+                        product: products[index],
+                      );
+                    }),
+          ),
         ],
       ),
     );
