@@ -21,11 +21,7 @@ class _SplashState extends State<Splash> {
   _navigateToHome() async {
     await Future.delayed(Duration(milliseconds: 3000), () {});
     Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const MyHomePage(
-                  title: 'Basic UI',
-                )));
+        context, MaterialPageRoute(builder: (context) => const MyLoginPage()));
   }
 
   Widget build(BuildContext context) {
