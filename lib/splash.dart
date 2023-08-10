@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/main.dart';
+import 'auth/login_page.dart';
 
 import 'home.dart';
 
@@ -16,16 +17,22 @@ class _SplashState extends State<Splash> {
     super.initState();
     _navigateToHome();
   }
+
   _navigateToHome() async {
     await Future.delayed(Duration(milliseconds: 3000), () {});
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MyHomePage(title: 'Sample UI')));
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const MyHomePage(
+                  title: 'Basic UI',
+                )));
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Container(
-          child:Text(
+          child: Text(
             'Awesome Store',
             style: TextStyle(
               fontSize: 24,
