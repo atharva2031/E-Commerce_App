@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/splash.dart';
 
-import 'auth/login_page.dart';
-import 'home.dart';
+
 
 void main() {
   runApp(const MyApp());
