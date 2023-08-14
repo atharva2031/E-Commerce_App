@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import '../app_theme.dart';
+import 'package:untitled/auth/register_page.dart';
+import '../../app_theme.dart';
+import '../home.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({super.key});
@@ -20,7 +25,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 child: Column(
                   children: [
                     const SizedBox(
-                      height: 80,
+                      height: 20,
                     ),
                     Image.network(
                         'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.yK11aU4JRs-atXxp5-fxyQHaE8%26pid%3DApi&f=1&ipt=ab285e6fd7d30cd70420981d53cbb11c392153c7f056e0d2c2ee2ebd4c814e60&ipo=images'),
@@ -89,7 +94,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                                     style:
                                         AppTheme.of(context).bodyText1.override(
                                               fontFamily: 'Poppins',
-                                              color: Color(0xFF95A1AC),
+                                              color: const Color(0xFF95A1AC),
                                             ),
                                   ),
                                 ),
@@ -160,7 +165,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                                     style:
                                         AppTheme.of(context).bodyText1.override(
                                               fontFamily: 'Poppins',
-                                              color: Color(0xFF95A1AC),
+                                              color: const Color(0xFF95A1AC),
                                             ),
                                   ),
                                 ),
@@ -170,6 +175,79 @@ class _MyLoginPageState extends State<MyLoginPage> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Container(
+                        width: 120,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          child: const Text('Login'),
+                          style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(327, 50),
+                              backgroundColor: Colors.green,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(50)))),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Container(
+                        width: 250,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MyHomePage(
+                                  title: 'Home Page',
+                                ),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              Image.network(
+                                'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.HG6XtzIxf4Nbo_vZt8T3EAHaHa%26pid%3DApi&f=1&ipt=01d499ffa80d3f81762baf6a2ee69793c9a095e1c88e61990756b42bcfe24da6&ipo=images',
+                                height: 30,
+                                width: 40,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 15),
+                                child: Text(
+                                  'Sign in using Google',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            child: Text('New User? Register here'),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MyRegistrationPage(),
+                                ),
+                              );
+                            },
+                          )
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),

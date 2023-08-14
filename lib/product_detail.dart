@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/app_theme.dart';
+import '../app_theme.dart';
 import 'products.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 

@@ -8,7 +8,7 @@ import 'product_tile_animation.dart';
 import 'cart_bloc.dart';
 
 import 'products.dart';
-import 'app_theme.dart';
+import '../app_theme.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'product_detail.dart';
 import 'package:get/get.dart';
@@ -104,7 +104,8 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {
+          onPressed: () async {
+            Navigator.pop(context);
           },
           icon: Icon(Icons.arrow_back),
           color: Colors.black,
