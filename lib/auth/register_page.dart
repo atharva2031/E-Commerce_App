@@ -1,6 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../widgets/text_field.dart';
-import '../app_theme.dart';
+import '../widgets/app_theme.dart';
 import '../home.dart';
 
 class MyRegistrationPage extends StatefulWidget {
@@ -11,6 +12,9 @@ class MyRegistrationPage extends StatefulWidget {
 }
 
 class _MyRegistrationPageState extends State<MyRegistrationPage> {
+  TextEditingController passwordTextController = TextEditingController();
+  TextEditingController emailTextController = TextEditingController();
+  TextEditingController nameTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,24 +34,46 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
                       'Register to Awesome Store',
                       style: AppTheme.of(context).title2,
                     ),
-                    const MyTextField(
+                    MyTextField(
+                      obscuretext: false,
                       labelText: 'Name',
-                      icon: Icon(Icons.person),
+                      icon: const Icon(Icons.person),
+                      controller: nameTextController,
                     ),
-                    const MyTextField(
+                    MyTextField(
+                      obscuretext: false,
                       labelText: 'E-Mail',
-                      icon: Icon(Icons.email),
+                      icon: const Icon(Icons.email),
+                      controller: emailTextController,
                     ),
-                    const MyTextField(
-                      labelText: 'Phone Number',
-                      icon: Icon(Icons.phone),
+                    MyTextField(
+                      obscuretext: true,
+                      labelText: 'Password',
+                      icon: const Icon(Icons.remove_red_eye),
+                      controller: passwordTextController,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Container(
                         width: 120,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            FirebaseAuth.instance
+                                .createUserWithEmailAndPassword(
+                                    email: emailTextController.text,
+                                    password: passwordTextController.text)
+                                .then((value) {
+                              print("Created New Account");
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const MyHomePage(
+                                            title: 'title',
+                                          )));
+                            }).onError((error, stackTrace) {
+                              print("Error ${error.toString()}");
+                            });
+                          },
                           child: const Text('Register'),
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(327, 50),
@@ -65,16 +91,7 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MyHomePage(
-                                  title: 'Home Page',
-                                ),
-                              ),
-                            );
-                          },
+                          onPressed: () {},
                           child: Row(
                             children: [
                               Image.network(

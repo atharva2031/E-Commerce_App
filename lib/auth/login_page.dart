@@ -1,9 +1,9 @@
-import 'dart:io';
 
-import 'package:flutter/gestures.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:untitled/auth/register_page.dart';
-import '../../app_theme.dart';
+import '../widgets/app_theme.dart';
 import '../home.dart';
 
 class MyLoginPage extends StatefulWidget {
@@ -14,6 +14,11 @@ class MyLoginPage extends StatefulWidget {
 }
 
 class _MyLoginPageState extends State<MyLoginPage> {
+  TextEditingController passwordTextController = TextEditingController();
+  TextEditingController emailTextController = TextEditingController();
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +62,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(4, 0, 4, 0),
                                 child: Icon(
-                                  Icons.person_2,
+                                  Icons.mail,
                                   color: Color(0xFF95A1AC),
                                   size: 24,
                                 ),
@@ -69,7 +74,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                                   child: TextFormField(
                                     obscureText: false,
                                     decoration: const InputDecoration(
-                                      labelText: 'Username',
+                                      labelText: 'E-Mail',
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0x00000000),
@@ -138,7 +143,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                                   padding: const EdgeInsetsDirectional.fromSTEB(
                                       4, 0, 0, 0),
                                   child: TextFormField(
-                                    obscureText: false,
+                                    obscureText: true,
                                     decoration: const InputDecoration(
                                       labelText: 'Password',
                                       enabledBorder: UnderlineInputBorder(
@@ -180,7 +185,23 @@ class _MyLoginPageState extends State<MyLoginPage> {
                       child: Container(
                         width: 120,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                    email: emailTextController.text,
+                                    password: passwordTextController.text)
+                                .then((value) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const MyHomePage(
+                                            title: 'title',
+                                          )));
+                            }).onError((error, stackTrace) {
+                              // ignore: avoid_print
+                              print("Error ${error.toString()}");
+                            });
+                          },
                           child: const Text('Login'),
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(327, 50),
@@ -234,7 +255,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                       child: Row(
                         children: [
                           GestureDetector(
-                            child: Text('New User? Register here'),
+                            child: const Text('New User? Register here'),
                             onTap: () {
                               Navigator.push(
                                 context,

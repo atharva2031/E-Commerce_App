@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import '../app_theme.dart';
-import 'products.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:get/get.dart';
+import 'package:untitled/widgets/button.dart';
+import '../state_management/cart_bloc.dart';
+import '../widgets/app_theme.dart';
+import '../widgets/count_controller.dart';
+import 'package:untitled/product_views/products.dart';
+
 
 class ProductDetailWidget extends StatefulWidget {
   const ProductDetailWidget({Key? key, required this.product})
@@ -13,6 +17,9 @@ class ProductDetailWidget extends StatefulWidget {
 }
 
 class _ProductDetailWidgetState extends State<ProductDetailWidget> {
+  int? countControllerValue;
+
+  final cartController = Get.put(CartController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,43 +144,54 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                           width: 2,
                         ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () {},
-                            child: Icon(
-                              Icons.remove_rounded,
-                              color: AppTheme.of(context).secondaryText,
-                              size: 16,
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            child: Icon(
-                              Icons.add_rounded,
-                              color: AppTheme.of(context).secondaryText,
-                              size: 16,
-                            ),
-                          ),
-                        ],
+                      child: CountController(
+                        decrementIconBuilder: (enabled) => Icon(
+                          Icons.remove_rounded,
+                          color: enabled
+                              ? AppTheme.of(context).secondaryText
+                              : AppTheme.of(context).secondaryText,
+                          size: 16,
+                        ),
+                        incrementIconBuilder: (enabled) => Icon(
+                          Icons.add_rounded,
+                          color: enabled
+                              ? AppTheme.of(context).primaryColor
+                              : AppTheme.of(context).secondaryText,
+                          size: 16,
+                        ),
+                        countBuilder: (count) => Text(
+                          count.toString(),
+                          style: AppTheme.of(context).subtitle1,
+                        ),
+                        count: countControllerValue ??= 1,
+                        updateCount: (count) =>
+                            setState(() => countControllerValue = count),
+                        stepSize: 1,
+                        minimum: 1,
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {},
-
-                      child: Container(
-                        height: 20.0,
-                        width: 110,
-                        child: const Text(
-                          'Add to Cart',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ),
-                    )
+                    MyButtonWidget(
+                      onPressed: () {
+                        Product p = widget.product;
+                        p.quantity = countControllerValue!.toInt();
+                        cartController.addToCart(p);
+                      },
+                      text: 'Add to Cart',
+                      options: ButtonOptions(
+                          width: 160,
+                          height: 50,
+                          color: AppTheme.of(context).primaryColor,
+                          textStyle: AppTheme.of(context).subtitle2.override(
+                                fontFamily: 'Poppins',
+                                color: Colors.white,
+                              ),
+                          elevation: 5,
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(36))),
+                    ),
                   ],
                 ),
               ),

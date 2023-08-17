@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
-import '../app_theme.dart';
+import '../widgets/app_theme.dart';
 import 'products.dart';
 import 'product_detail.dart';
 

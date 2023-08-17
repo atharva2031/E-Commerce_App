@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../app_theme.dart';
+import 'app_theme.dart';
 
 class MyTextField extends StatelessWidget {
-  const MyTextField({super.key, required this.labelText, required this.icon});
+  const MyTextField(
+      {super.key,
+      required this.labelText,
+      required this.icon,
+      required this.controller,
+      required this.obscuretext});
 
   final String labelText;
   final Icon icon;
+  final TextEditingController controller;
+  final bool obscuretext;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +42,7 @@ class MyTextField extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
                   child: TextFormField(
-                    obscureText: false,
+                    obscureText: obscuretext,
                     decoration: InputDecoration(
                       labelText: labelText,
                       enabledBorder: const UnderlineInputBorder(
