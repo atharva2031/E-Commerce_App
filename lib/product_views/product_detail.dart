@@ -4,12 +4,10 @@ import 'package:untitled/widgets/button.dart';
 import '../state_management/cart_bloc.dart';
 import '../widgets/app_theme.dart';
 import '../widgets/count_controller.dart';
-import 'package:untitled/product_views/products.dart';
-
+import 'products.dart';
 
 class ProductDetailWidget extends StatefulWidget {
-  const ProductDetailWidget({Key? key, required this.product})
-      : super(key: key);
+  const ProductDetailWidget({Key? key, required this.product}) : super(key: key);
   final Product product;
 
   @override
@@ -76,7 +74,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  widget.product.image,
+                  widget.product!.image,
                   width: double.infinity,
                   height: 300,
                   fit: BoxFit.cover,
@@ -94,7 +92,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(16, 4, 0, 0),
             child: Text(
-              '\$${widget.product.price}',
+              '\$${widget.product?.price}',
               textAlign: TextAlign.start,
               style: AppTheme.of(context).subtitle1,
             ),
@@ -171,11 +169,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                       ),
                     ),
                     MyButtonWidget(
-                      onPressed: () {
-                        Product p = widget.product;
-                        p.quantity = countControllerValue!.toInt();
-                        cartController.addToCart(p);
-                      },
+                      onPressed: () {},
                       text: 'Add to Cart',
                       options: ButtonOptions(
                           width: 160,

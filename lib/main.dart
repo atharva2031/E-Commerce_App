@@ -2,13 +2,21 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/widgets/splash.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+Future<void> main() async {
+  await SentryFlutter.init(
+    (options) => {
+      options.dsn =
+          'https://f67869e3983d4e1698f1c092bd880fb9@o1418292.ingest.sentry.io/4504078280556544',
+      options.tracesSampleRate = 1.0,
+      options.attachScreenshot = true,
+    },
+    appRunner: () => runApp(const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MyApp(),
+    )),
   );
-  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

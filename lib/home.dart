@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:untitled/auth/login_page.dart';
+import '../screens/login_page.dart';
 
 import 'product_views/product_tile_animation.dart';
 

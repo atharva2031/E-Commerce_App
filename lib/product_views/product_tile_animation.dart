@@ -9,7 +9,7 @@ class ProductTileAnimation extends StatelessWidget {
   final int itemNo;
   final Product product;
 
-  const ProductTileAnimation({this.itemNo = 0, required this.product});
+  const ProductTileAnimation({super.key, this.itemNo = 0, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class ProductTileAnimation extends StatelessWidget {
             //width: MediaQuery.of(context).size.width * 0.45,
             decoration: BoxDecoration(
               color: AppTheme.of(context).secondaryBackground,
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   blurRadius: 4,
                   color: Color(0x3600000F),
@@ -49,7 +49,7 @@ class ProductTileAnimation extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ClipRRect(
-                          borderRadius: BorderRadius.only(
+                          borderRadius: const BorderRadius.only(
                             bottomLeft: Radius.circular(0),
                             bottomRight: Radius.circular(0),
                             topLeft: Radius.circular(8),

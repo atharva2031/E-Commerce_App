@@ -1,8 +1,7 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:untitled/auth/register_page.dart';
+import 'register_page.dart';
 import '../widgets/app_theme.dart';
 import '../home.dart';
 
@@ -16,8 +15,6 @@ class MyLoginPage extends StatefulWidget {
 class _MyLoginPageState extends State<MyLoginPage> {
   TextEditingController passwordTextController = TextEditingController();
   TextEditingController emailTextController = TextEditingController();
-
-
 
   @override
   Widget build(BuildContext context) {
