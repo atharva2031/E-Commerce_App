@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../services/firebase_auth_methods.dart';
 import '../widgets/text_field.dart';
 import '../widgets/app_theme.dart';
 import '../home.dart';
@@ -15,6 +17,20 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
   TextEditingController passwordTextController = TextEditingController();
   TextEditingController emailTextController = TextEditingController();
   TextEditingController nameTextController = TextEditingController();
+
+
+
+    void signUpUser() async {
+    context.read<FirebaseAuthMethods>().signUpWithEmail(
+          email: emailTextController.text,
+          password: passwordTextController.text,
+          context: context,
+        );
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,23 +73,7 @@ class _MyRegistrationPageState extends State<MyRegistrationPage> {
                       child: Container(
                         width: 120,
                         child: ElevatedButton(
-                          onPressed: () {
-                            FirebaseAuth.instance
-                                .createUserWithEmailAndPassword(
-                                    email: emailTextController.text,
-                                    password: passwordTextController.text)
-                                .then((value) {
-                              print("Created New Account");
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const MyHomePage(
-                                            title: 'title',
-                                          )));
-                            }).onError((error, stackTrace) {
-                              print("Error ${error.toString()}");
-                            });
-                          },
+                          onPressed: signUpUser,
                           child: const Text('Register'),
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(327, 50),

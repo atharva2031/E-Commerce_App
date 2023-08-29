@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import '../services/firebase_auth_methods.dart';
 import 'register_page.dart';
 import '../widgets/app_theme.dart';
 import '../home.dart';
@@ -15,6 +16,14 @@ class MyLoginPage extends StatefulWidget {
 class _MyLoginPageState extends State<MyLoginPage> {
   TextEditingController passwordTextController = TextEditingController();
   TextEditingController emailTextController = TextEditingController();
+
+  void loginUser() {
+    context.read<FirebaseAuthMethods>().loginWithEmail(
+          email: emailTextController.text,
+          password: passwordTextController.text,
+          context: context,
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -182,23 +191,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                       child: Container(
                         width: 120,
                         child: ElevatedButton(
-                          onPressed: () {
-                            FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                                    email: emailTextController.text,
-                                    password: passwordTextController.text)
-                                .then((value) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const MyHomePage(
-                                            title: 'title',
-                                          )));
-                            }).onError((error, stackTrace) {
-                              // ignore: avoid_print
-                              print("Error ${error.toString()}");
-                            });
-                          },
+                          onPressed: loginUser,
                           child: const Text('Login'),
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(327, 50),

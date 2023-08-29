@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:get/get.dart';
+import 'package:untitled/state_management/controllers/cart_controller.dart';
 import 'package:untitled/widgets/button.dart';
-import '../state_management/cart_bloc.dart';
+import 'package:untitled/widgets/checkout_widget.dart';
+
 import '../widgets/app_theme.dart';
 import '../widgets/count_controller.dart';
 import 'products.dart';
 
 class ProductDetailWidget extends StatefulWidget {
-  const ProductDetailWidget({Key? key, required this.product}) : super(key: key);
+  const ProductDetailWidget({Key? key, required this.product})
+      : super(key: key);
   final Product product;
 
   @override
@@ -43,23 +47,44 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                 fontWeight: FontWeight.w500,
               ),
         ),
-        actions: <Widget>[
-          Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: TextButton.icon(
-                  style: TextButton.styleFrom(foregroundColor: Colors.black),
+        actions: [
+          GetX<CartController>(builder: (controller) {
+            return Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 8, 24, 0),
+              child: badges.Badge(
+                badgeContent: Text(
+                  '${controller.cartItems.length}',
+                  style: AppTheme.of(context).bodyText1.override(
+                        fontFamily: 'Poppins',
+                        color: Colors.white,
+                      ),
+                ),
+                showBadge: true,
+                shape: badges.BadgeShape.circle,
+                badgeColor: AppTheme.of(context).primaryColor,
+                elevation: 4,
+                padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                position: badges.BadgePosition.topEnd(),
+                animationType: badges.BadgeAnimationType.scale,
+                toAnimate: true,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.shopping_cart_outlined,
+                    color: AppTheme.of(context).secondaryText,
+                    size: 30,
+                  ),
                   onPressed: () {
-                    //Navigator.pushNamed(context, CartPage.routeName);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CheckoutWidget(),
+                      ),
+                    );
                   },
-                  icon: Icon(Icons.shopping_cart),
-                  label: Text(''),
-                  key: Key('cart'),
                 ),
               ),
-            ],
-          ),
+            );
+          }),
         ],
         elevation: 0,
       ),
@@ -74,7 +99,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  widget.product!.image,
+                  widget.product.image,
                   width: double.infinity,
                   height: 300,
                   fit: BoxFit.cover,
@@ -92,7 +117,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(16, 4, 0, 0),
             child: Text(
-              '\$${widget.product?.price}',
+              '\$${widget.product.price}',
               textAlign: TextAlign.start,
               style: AppTheme.of(context).subtitle1,
             ),
@@ -169,7 +194,11 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                       ),
                     ),
                     MyButtonWidget(
-                      onPressed: () {},
+                      onPressed: () {
+                        Product p = widget.product;
+                        p.quantity = countControllerValue!.toInt();
+                        cartController.addToCart(widget.product);
+                      },
                       text: 'Add to Cart',
                       options: ButtonOptions(
                           width: 160,

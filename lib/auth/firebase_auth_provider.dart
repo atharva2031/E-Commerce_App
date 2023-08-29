@@ -4,7 +4,6 @@ import '../exception/exception.dart';
 import 'auth_provider.dart';
 import 'auth_user.dart';
 
-import '../firebase_options.dart';
 
 class FirebaseAuthProvider implements AuthProvider {
   @override
@@ -49,7 +48,6 @@ class FirebaseAuthProvider implements AuthProvider {
   @override
   Future<void> initalize() async {
     await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
     );
   }
 

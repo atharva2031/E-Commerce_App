@@ -1,14 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:untitled/state_management/controllers/cart_controller.dart';
+import 'package:untitled/widgets/checkout_widget.dart';
 import '../screens/login_page.dart';
+import 'package:badges/badges.dart' as badges;
+import 'product_views/product_tile_animation.dart';
+
 
 import 'product_views/product_tile_animation.dart';
 
-import 'state_management/cart_bloc.dart';
-import 'product_views/product_tile_animation.dart';
-
-import 'state_management/cart_bloc.dart';
 import 'package:untitled/product_views/products.dart';
 import 'widgets/app_theme.dart';
 import 'package:easy_debounce/easy_debounce.dart';
@@ -119,23 +120,44 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
-        actions: <Widget>[
-          Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: TextButton.icon(
-                  style: TextButton.styleFrom(foregroundColor: Colors.black),
+        actions: [
+          GetX<CartController>(builder: (controller) {
+            return Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 8, 24, 0),
+              child: badges.Badge(
+                badgeContent: Text(
+                  '${controller.cartItems.length}',
+                  style: AppTheme.of(context).bodyText1.override(
+                        fontFamily: 'Poppins',
+                        color: Colors.white,
+                      ),
+                ),
+                showBadge: true,
+                shape: badges.BadgeShape.circle,
+                badgeColor: AppTheme.of(context).primaryColor,
+                elevation: 4,
+                padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                position: badges.BadgePosition.topEnd(),
+                animationType: badges.BadgeAnimationType.scale,
+                toAnimate: true,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.shopping_cart_outlined,
+                    color: AppTheme.of(context).secondaryText,
+                    size: 30,
+                  ),
                   onPressed: () {
-                    //Navigator.pushNamed(context, CartPage.routeName);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CheckoutWidget(),
+                      ),
+                    );
                   },
-                  icon: Icon(Icons.shopping_cart),
-                  label: Text(''),
-                  key: Key('cart'),
                 ),
               ),
-            ],
-          ),
+            );
+          }),
         ],
       ),
       body: Column(
