@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:untitled/widgets/count_controller.dart';
 
 import '../product_views/products.dart';
 import '../state_management/controllers/cart_controller.dart';
@@ -16,7 +17,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final cartController = Get.put(CartController());
 
-  late List<Product> cartItems;
+  var cartItems = <Product>[].obs;
 
   @override
   void initState() {
@@ -90,17 +91,17 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
       backgroundColor: AppTheme.of(context).primaryBackground,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    GetX<CartController>(builder: (controller) {
-                      return ListView.builder(
+        child: GetX<CartController>(builder: (controller) {
+          return Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      ListView.builder(
                           padding: EdgeInsets.zero,
                           primary: false,
                           shrinkWrap: true,
@@ -140,7 +141,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                           borderRadius:
                                               BorderRadius.circular(12),
                                           child: Image.network(
-                                            cartItems[index].image,
+                                            controller.cartItems[index].image,
                                             width: 80,
                                             height: 80,
                                             fit: BoxFit.fitWidth,
@@ -161,7 +162,8 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(0, 0, 0, 8),
                                               child: Text(
-                                                cartItems[index].name,
+                                                controller
+                                                    .cartItems[index].name,
                                                 style: AppTheme.of(context)
                                                     .subtitle2
                                                     .override(
@@ -173,7 +175,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                               ),
                                             ),
                                             Text(
-                                              '\$${cartItems[index].price}',
+                                              '\$${controller.cartItems[index].price}',
                                               style: AppTheme.of(context)
                                                   .bodyText2,
                                             ),
@@ -181,7 +183,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(0, 8, 0, 0),
                                               child: Text(
-                                                'Quanity: ${cartItems[index].quantity}',
+                                                'Quanity: ${controller.cartItems[index].quantity}',
                                                 style: AppTheme.of(context)
                                                     .bodyText2,
                                               ),
@@ -189,153 +191,196 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                           ],
                                         ),
                                       ),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.delete_outline_rounded,
-                                          color: Color(0xFFE86969),
-                                          size: 20,
-                                        ),
-                                        onPressed: () {
-                                          cartController
-                                              .removeFromCart(cartItems[index]);
-                                        },
-                                      ),
+                                      Column(
+                                        children: [
+                                          CountController(
+                                            decrementIconBuilder: (enabled) =>
+                                                Icon(
+                                              Icons.remove_rounded,
+                                              color: enabled
+                                                  ? AppTheme.of(context)
+                                                      .secondaryText
+                                                  : AppTheme.of(context)
+                                                      .secondaryText,
+                                              size: 16,
+                                            ),
+                                            incrementIconBuilder: (enabled) =>
+                                                Icon(
+                                              Icons.add_rounded,
+                                              color: enabled
+                                                  ? AppTheme.of(context)
+                                                      .primaryColor
+                                                  : AppTheme.of(context)
+                                                      .secondaryText,
+                                              size: 16,
+                                            ),
+                                            countBuilder: (count) => Text(
+                                              count.toString(),
+                                              style: AppTheme.of(context)
+                                                  .subtitle1,
+                                            ),
+                                            count: controller
+                                                .cartItems[index].quantity,
+                                            updateCount: (count) => setState(
+                                                () => controller
+                                                    .cartItems[index]
+                                                    .quantity = count),
+                                            stepSize: 1,
+                                            minimum: 1,
+                                          ),
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.delete_outline_rounded,
+                                              color: Color(0xFFE86969),
+                                              size: 20,
+                                            ),
+                                            onPressed: () {
+                                              controller.removeFromCart(
+                                                  cartItems[index]);
+                                            },
+                                          ),
+                                        ],
+                                      )
                                     ],
                                   ),
                                 ),
                               ),
                             );
-                          });
-                    }),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(24, 16, 24, 4),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text(
-                            'Price Breakdown',
-                            style: AppTheme.of(context).bodyText2,
-                          ),
-                        ],
+                          }),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(24, 16, 24, 4),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              'Price Breakdown',
+                              style: AppTheme.of(context).bodyText2,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(24, 4, 24, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Base Price',
-                            style: AppTheme.of(context).subtitle2,
-                          ),
-                          Text(
-                            '\$${cartController.totalPrice}',
-                            style: AppTheme.of(context).subtitle1,
-                          ),
-                        ],
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(24, 4, 24, 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Base Price',
+                              style: AppTheme.of(context).subtitle2,
+                            ),
+                            Text(
+                              '\$${controller.totalPrice}',
+                              style: AppTheme.of(context).subtitle1,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(24, 4, 24, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Taxes',
-                            style: AppTheme.of(context).subtitle2,
-                          ),
-                          Text(
-                            '\$24.20',
-                            style: AppTheme.of(context).subtitle1,
-                          ),
-                        ],
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(24, 4, 24, 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Taxes',
+                              style: AppTheme.of(context).subtitle2,
+                            ),
+                            Text(
+                              controller.totalPrice == 0 ? '\$0.00' : '\$24.20',
+                              style: AppTheme.of(context).subtitle1,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(24, 4, 24, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Cleaning Fee',
-                            style: AppTheme.of(context).subtitle2,
-                          ),
-                          Text(
-                            '\$40.00',
-                            style: AppTheme.of(context).subtitle1,
-                          ),
-                        ],
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(24, 4, 24, 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Cleaning Fee',
+                              style: AppTheme.of(context).subtitle2,
+                            ),
+                            Text(
+                              controller.totalPrice == 0 ? '\$0.00' : '\$40.00',
+                              style: AppTheme.of(context).subtitle1,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(24, 4, 24, 24),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                'Total',
-                                style: AppTheme.of(context).subtitle2,
-                              ),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.info_outlined,
-                                  color: Color(0xFF57636C),
-                                  size: 18,
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(24, 4, 24, 24),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  'Total',
+                                  style: AppTheme.of(context).subtitle2,
                                 ),
-                                onPressed: () {
-                                  print('IconButton pressed ...');
-                                },
-                              ),
-                            ],
-                          ),
-                          Text(
-                            '\$${cartController.totalPrice + 24.20 + 40.00}',
-                            style: AppTheme.of(context).title1,
-                          ),
-                        ],
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.info_outlined,
+                                    color: Color(0xFF57636C),
+                                    size: 18,
+                                  ),
+                                  onPressed: () {
+                                    print('IconButton pressed ...');
+                                  },
+                                ),
+                              ],
+                            ),
+                            Text(
+                              controller.totalPrice == 0
+                                  ? '0.00'
+                                  : '\$${controller.totalPrice + 24.20 + 40.00}',
+                              style: AppTheme.of(context).title1,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Container(
-              width: double.infinity,
-              height: 100,
-              decoration: BoxDecoration(
-                color: AppTheme.of(context).primaryColor,
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 4,
-                    color: Color(0x320E151B),
-                    offset: Offset(0, -2),
-                  )
-                ],
-                // borderRadius: BorderRadius.only(
-                //   bottomLeft: Radius.circular(0),
-                //   bottomRight: Radius.circular(0),
-                //   topLeft: Radius.circular(16),
-                //   topRight: Radius.circular(16),
-                // ),
+              Container(
+                width: double.infinity,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: AppTheme.of(context).primaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 4,
+                      color: Color(0x320E151B),
+                      offset: Offset(0, -2),
+                    )
+                  ],
+                  // borderRadius: BorderRadius.only(
+                  //   bottomLeft: Radius.circular(0),
+                  //   bottomRight: Radius.circular(0),
+                  //   topLeft: Radius.circular(16),
+                  //   topRight: Radius.circular(16),
+                  // ),
+                ),
+                alignment: AlignmentDirectional(0, -0.35),
+                child: Text(
+                  controller.totalPrice == 0
+                      ? 'Checkout (\$0.00)'
+                      : 'Checkout (\$${controller.totalPrice + 24.20 + 40.00})',
+                  style: AppTheme.of(context).title2.override(
+                        fontFamily: 'Poppins',
+                        color: AppTheme.of(context).primaryBtnText,
+                      ),
+                ),
               ),
-              alignment: AlignmentDirectional(0, -0.35),
-              child: Text(
-                'Checkout (\$230.20)',
-                style: AppTheme.of(context).title2.override(
-                      fontFamily: 'Poppins',
-                      color: AppTheme.of(context).primaryBtnText,
-                    ),
-              ),
-            ),
-          ],
-        ),
+            ],
+          );
+        }),
       ),
     );
   }
